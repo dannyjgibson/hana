@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos;
+package edu.lmu.cs.xlg.hana;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,10 +15,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import edu.lmu.cs.xlg.carlos.entities.Program;
+import edu.lmu.cs.xlg.hana.entities.Program;
 
 /**
- * A unit test for the front end of the Carlos compiler.  It reads all the ".carlos" files in the
+ * A unit test for the front end of the Hana compiler.  It reads all the ".hana" files in the
  * test resources directory.  Whenever a filename starts with "synerror" the tester asserts that
  * the compiler will detect a syntax error.  Whenever a name starts with "semerror" the tester
  * asserts that the compiler successfully parses the program but then detects a semantic error.
@@ -29,7 +29,7 @@ import edu.lmu.cs.xlg.carlos.entities.Program;
 public class FrontEndTest {
 
     private static final String TEST_DIRECTORY = "src/test/resources";
-    private static final String EXTENSION = ".carlos";
+    private static final String EXTENSION = ".hana";
 
     private String filename;
 

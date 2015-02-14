@@ -1,7 +1,7 @@
 /*
- *  Carlos.jj
+ *  Hana.jj
  *
- *  Carlos specification for JavaCC.
+ *  Hana specification for JavaCC.
  */
 
 // ---------------------------------------------------------------------------
@@ -19,13 +19,13 @@ options {
 
 PARSER_BEGIN(Parser)
 
-package edu.lmu.cs.xlg.carlos.syntax;
+package edu.lmu.cs.xlg.hana.syntax;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Reader;
 import edu.lmu.cs.xlg.util.Log;
-import edu.lmu.cs.xlg.carlos.entities.*;
+import edu.lmu.cs.xlg.hana.entities.*;
 
 public class Parser {
     public Program parse(Reader reader, Log log) {

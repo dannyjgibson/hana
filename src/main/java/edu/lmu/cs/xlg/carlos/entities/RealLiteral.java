@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
  * A real literal, like "2.3", "4.6634E-231", etc.

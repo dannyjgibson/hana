@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
  * A superclass for anything that can be declared, such as types, variables, and functions.

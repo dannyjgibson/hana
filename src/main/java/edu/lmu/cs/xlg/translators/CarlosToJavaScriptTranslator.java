@@ -8,49 +8,49 @@ import java.util.List;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 
-import edu.lmu.cs.xlg.carlos.entities.ArrayAggregate;
-import edu.lmu.cs.xlg.carlos.entities.AssignmentStatement;
-import edu.lmu.cs.xlg.carlos.entities.Block;
-import edu.lmu.cs.xlg.carlos.entities.BooleanLiteral;
-import edu.lmu.cs.xlg.carlos.entities.BreakStatement;
-import edu.lmu.cs.xlg.carlos.entities.CallExpression;
-import edu.lmu.cs.xlg.carlos.entities.CallStatement;
-import edu.lmu.cs.xlg.carlos.entities.Case;
-import edu.lmu.cs.xlg.carlos.entities.CharLiteral;
-import edu.lmu.cs.xlg.carlos.entities.ClassicForStatement;
-import edu.lmu.cs.xlg.carlos.entities.Declaration;
-import edu.lmu.cs.xlg.carlos.entities.DottedVariable;
-import edu.lmu.cs.xlg.carlos.entities.EmptyArray;
-import edu.lmu.cs.xlg.carlos.entities.Entity;
-import edu.lmu.cs.xlg.carlos.entities.Expression;
-import edu.lmu.cs.xlg.carlos.entities.Function;
-import edu.lmu.cs.xlg.carlos.entities.IfStatement;
-import edu.lmu.cs.xlg.carlos.entities.IncrementStatement;
-import edu.lmu.cs.xlg.carlos.entities.InfixExpression;
-import edu.lmu.cs.xlg.carlos.entities.IntegerLiteral;
-import edu.lmu.cs.xlg.carlos.entities.NullLiteral;
-import edu.lmu.cs.xlg.carlos.entities.PostfixExpression;
-import edu.lmu.cs.xlg.carlos.entities.PrefixExpression;
-import edu.lmu.cs.xlg.carlos.entities.PrintStatement;
-import edu.lmu.cs.xlg.carlos.entities.Program;
-import edu.lmu.cs.xlg.carlos.entities.RealLiteral;
-import edu.lmu.cs.xlg.carlos.entities.ReturnStatement;
-import edu.lmu.cs.xlg.carlos.entities.SimpleVariableReference;
-import edu.lmu.cs.xlg.carlos.entities.Statement;
-import edu.lmu.cs.xlg.carlos.entities.StringLiteral;
-import edu.lmu.cs.xlg.carlos.entities.StructAggregate;
-import edu.lmu.cs.xlg.carlos.entities.StructField;
-import edu.lmu.cs.xlg.carlos.entities.StructType;
-import edu.lmu.cs.xlg.carlos.entities.SubscriptedVariable;
-import edu.lmu.cs.xlg.carlos.entities.Type;
-import edu.lmu.cs.xlg.carlos.entities.Variable;
-import edu.lmu.cs.xlg.carlos.entities.VariableExpression;
-import edu.lmu.cs.xlg.carlos.entities.WhileStatement;
+import edu.lmu.cs.xlg.hana.entities.ArrayAggregate;
+import edu.lmu.cs.xlg.hana.entities.AssignmentStatement;
+import edu.lmu.cs.xlg.hana.entities.Block;
+import edu.lmu.cs.xlg.hana.entities.BooleanLiteral;
+import edu.lmu.cs.xlg.hana.entities.BreakStatement;
+import edu.lmu.cs.xlg.hana.entities.CallExpression;
+import edu.lmu.cs.xlg.hana.entities.CallStatement;
+import edu.lmu.cs.xlg.hana.entities.Case;
+import edu.lmu.cs.xlg.hana.entities.CharLiteral;
+import edu.lmu.cs.xlg.hana.entities.ClassicForStatement;
+import edu.lmu.cs.xlg.hana.entities.Declaration;
+import edu.lmu.cs.xlg.hana.entities.DottedVariable;
+import edu.lmu.cs.xlg.hana.entities.EmptyArray;
+import edu.lmu.cs.xlg.hana.entities.Entity;
+import edu.lmu.cs.xlg.hana.entities.Expression;
+import edu.lmu.cs.xlg.hana.entities.Function;
+import edu.lmu.cs.xlg.hana.entities.IfStatement;
+import edu.lmu.cs.xlg.hana.entities.IncrementStatement;
+import edu.lmu.cs.xlg.hana.entities.InfixExpression;
+import edu.lmu.cs.xlg.hana.entities.IntegerLiteral;
+import edu.lmu.cs.xlg.hana.entities.NullLiteral;
+import edu.lmu.cs.xlg.hana.entities.PostfixExpression;
+import edu.lmu.cs.xlg.hana.entities.PrefixExpression;
+import edu.lmu.cs.xlg.hana.entities.PrintStatement;
+import edu.lmu.cs.xlg.hana.entities.Program;
+import edu.lmu.cs.xlg.hana.entities.RealLiteral;
+import edu.lmu.cs.xlg.hana.entities.ReturnStatement;
+import edu.lmu.cs.xlg.hana.entities.SimpleVariableReference;
+import edu.lmu.cs.xlg.hana.entities.Statement;
+import edu.lmu.cs.xlg.hana.entities.StringLiteral;
+import edu.lmu.cs.xlg.hana.entities.StructAggregate;
+import edu.lmu.cs.xlg.hana.entities.StructField;
+import edu.lmu.cs.xlg.hana.entities.StructType;
+import edu.lmu.cs.xlg.hana.entities.SubscriptedVariable;
+import edu.lmu.cs.xlg.hana.entities.Type;
+import edu.lmu.cs.xlg.hana.entities.Variable;
+import edu.lmu.cs.xlg.hana.entities.VariableExpression;
+import edu.lmu.cs.xlg.hana.entities.WhileStatement;
 
 /**
- * A translator from Carlos semantic graphs to JavaScript.
+ * A translator from Hana semantic graphs to JavaScript.
  */
-public class CarlosToJavaScriptTranslator {
+public class HanaToJavaScriptTranslator {
 
     private PrintWriter writer;
     private int indentPadding = 4;
@@ -307,7 +307,7 @@ public class CarlosToJavaScriptTranslator {
     }
 
     private String translateInfixExpression(InfixExpression e) {
-        // All Carlos binary operators look exactly the same as their JavaScript counterparts!
+        // All Hana binary operators look exactly the same as their JavaScript counterparts!
         String left = translateExpression(e.getLeft());
         String right = translateExpression(e.getRight());
         return String.format("(%s %s %s)", left, e.getOp(), right);

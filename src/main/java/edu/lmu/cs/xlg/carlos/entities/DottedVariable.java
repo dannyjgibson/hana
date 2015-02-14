@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
  * A variable of the form v.f.
@@ -48,8 +48,8 @@ public class DottedVariable extends VariableExpression {
 
     /**
      * Returns true, as one can always write to a dotted variable in
-     * Carlos.  In other languages we might allow for read-only fields,
-     * but not Carlos.
+     * Hana.  In other languages we might allow for read-only fields,
+     * but not Hana.
      */
     public boolean isWritable() {
         return true;

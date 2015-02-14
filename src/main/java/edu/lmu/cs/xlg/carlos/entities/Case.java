@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
  * A condition/block pair (if-statements are made up of a bunch of these).

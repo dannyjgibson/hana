@@ -1,7 +1,7 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
- * A class for Carlos variables.
+ * A class for Hana variables.
  */
 public class Variable extends Declarable {
 

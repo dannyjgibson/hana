@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos;
+package edu.lmu.cs.xlg.hana;
 
 import static javax.swing.KeyStroke.getKeyStroke;
 
@@ -28,16 +28,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 
-import edu.lmu.cs.xlg.carlos.entities.Entity.AnalysisContext;
-import edu.lmu.cs.xlg.carlos.entities.Program;
-import edu.lmu.cs.xlg.carlos.syntax.Parser;
-import edu.lmu.cs.xlg.translators.CarlosToJavaScriptTranslator;
+import edu.lmu.cs.xlg.hana.entities.Entity.AnalysisContext;
+import edu.lmu.cs.xlg.hana.entities.Program;
+import edu.lmu.cs.xlg.hana.syntax.Parser;
+import edu.lmu.cs.xlg.translators.HanaToJavaScriptTranslator;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
- * A simple GUI application for viewing the different things the Carlos compiler can do.
+ * A simple GUI application for viewing the different things the Hana compiler can do.
  *
- * The application has two panes.  The left is a simple text editor in which one can edit a Carlos
+ * The application has two panes.  The left is a simple text editor in which one can edit a Hana
  * program, load one from the file system, and save to the file system.  The right shows a view of
  * the program in response to a user selection action.  The user can choose to see
  * <ul>
@@ -60,7 +60,7 @@ public class Viewer extends JFrame {
     private JScrollPane sourcePane = new JScrollPane();
     private JScrollPane viewPane = new JScrollPane();
     private StringWriter errors = new StringWriter();
-    private Log log = new Log("Carlos", new PrintWriter(errors));
+    private Log log = new Log("Hana", new PrintWriter(errors));
     private File currentFile;
     private JFileChooser chooser = new JFileChooser(".");
 
@@ -140,7 +140,7 @@ public class Viewer extends JFrame {
         splitPane.setDividerLocation(480);
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        setTitle("Carlos Viewer");
+        setTitle("Hana Viewer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1024, 712);
     }
@@ -280,7 +280,7 @@ public class Viewer extends JFrame {
         Program program = optimize();
         if (log.getErrorCount() > 0) return null;
         StringWriter writer = new StringWriter();
-        new CarlosToJavaScriptTranslator().translateProgram(program, new PrintWriter(writer));
+        new HanaToJavaScriptTranslator().translateProgram(program, new PrintWriter(writer));
         return writer;
     }
 

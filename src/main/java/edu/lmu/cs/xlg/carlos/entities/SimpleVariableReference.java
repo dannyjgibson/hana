@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
 /**
  * A variable reference that consists solely of a simple identifier.
@@ -27,7 +27,7 @@ public class SimpleVariableReference extends VariableExpression {
     }
 
     /**
-     * Returns true, because simple variables are always writable in Carlos.
+     * Returns true, because simple variables are always writable in Hana.
      */
     public boolean isWritable() {
        return true;

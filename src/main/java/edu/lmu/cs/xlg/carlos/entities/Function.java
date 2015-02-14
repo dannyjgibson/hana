@@ -1,8 +1,8 @@
-package edu.lmu.cs.xlg.carlos.entities;
+package edu.lmu.cs.xlg.hana.entities;
 
-import static edu.lmu.cs.xlg.carlos.entities.Type.INT;
-import static edu.lmu.cs.xlg.carlos.entities.Type.REAL;
-import static edu.lmu.cs.xlg.carlos.entities.Type.STRING;
+import static edu.lmu.cs.xlg.hana.entities.Type.INT;
+import static edu.lmu.cs.xlg.hana.entities.Type.REAL;
+import static edu.lmu.cs.xlg.hana.entities.Type.STRING;
 
 import java.util.ArrayList;
 import java.util.Iterator;

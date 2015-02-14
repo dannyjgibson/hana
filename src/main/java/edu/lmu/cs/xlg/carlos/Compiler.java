@@ -1,4 +1,4 @@
-package edu.lmu.cs.xlg.carlos;
+package edu.lmu.cs.xlg.hana;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -6,32 +6,32 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 
-import edu.lmu.cs.xlg.carlos.entities.Entity.AnalysisContext;
-import edu.lmu.cs.xlg.carlos.entities.Program;
-import edu.lmu.cs.xlg.carlos.syntax.Parser;
-import edu.lmu.cs.xlg.translators.CarlosToJavaScriptTranslator;
+import edu.lmu.cs.xlg.hana.entities.Entity.AnalysisContext;
+import edu.lmu.cs.xlg.hana.entities.Program;
+import edu.lmu.cs.xlg.hana.syntax.Parser;
+import edu.lmu.cs.xlg.translators.HanaToJavaScriptTranslator;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
- * A Carlos compiler, with a main() method to enable running as a standalone application, and
+ * A Hana compiler, with a main() method to enable running as a standalone application, and
  * utility methods to compile from a stream for invocation by other applications (like testers,
  * debuggers, IDEs, etc).
  */
 public class Compiler {
 
     /**
-     *  A custom logger that writes errors and messages from a property file of base name Carlos.
+     *  A custom logger that writes errors and messages from a property file of base name Hana.
      */
-    private Log log = new Log("Carlos", new PrintWriter(System.err, true));
+    private Log log = new Log("Hana", new PrintWriter(System.err, true));
 
     /**
      * Processes command line arguments and runs the compiler based on the arguments. The command
      * line syntax for running the compiler as an application is:
      * <pre>
-     * java Carlos [option] &lt;basefilename&gt;
+     * java Hana [option] &lt;basefilename&gt;
      * </pre>
-     * where &lt;basefilename&gt; is the name of the Carlos source file without the mandatory
-     * <code>.carlos</code> extension. Option is:
+     * where &lt;basefilename&gt; is the name of the Hana source file without the mandatory
+     * <code>.hana</code> extension. Option is:
      * <pre>
      *   -syn: check syntax only, writes to stdout.
      *   -sem: check static semantics only, writes semantic graph to stdout.
@@ -80,7 +80,7 @@ public class Compiler {
     }
 
     /**
-     * Checks the syntax of a Carlos program from a reader.
+     * Checks the syntax of a Hana program from a reader.
      */
     public Program checkSyntax(Reader reader) throws IOException {
         log.clearErrors();
@@ -94,7 +94,7 @@ public class Compiler {
     }
 
     /**
-     * Checks the syntax and static semantics given Carlos source code from a reader.
+     * Checks the syntax and static semantics given Hana source code from a reader.
      */
     public Program checkSemantics(Reader reader) throws IOException {
         Program program = checkSyntax(reader);
@@ -114,7 +114,7 @@ public class Compiler {
     }
 
     /**
-     * Does the whole front end given Carlos source code from a reader.
+     * Does the whole front end given Hana source code from a reader.
      */
     public Program produceOptimizedSemanticGraph(Reader reader) throws IOException {
         Program program = checkSemantics(reader);
@@ -127,7 +127,7 @@ public class Compiler {
     }
 
     /**
-     * Compiles a Carlos program from a reader and writes the JavaScript to a writer.
+     * Compiles a Hana program from a reader and writes the JavaScript to a writer.
      */
     public void generateJavaScript(Reader reader, PrintWriter writer) throws IOException {
         Program program = produceOptimizedSemanticGraph(reader);
@@ -135,7 +135,7 @@ public class Compiler {
             return;
         }
         log.message("writing");
-        new CarlosToJavaScriptTranslator().translateProgram(program, writer);
+        new HanaToJavaScriptTranslator().translateProgram(program, writer);
         writer.close();
     }
 
