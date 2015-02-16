@@ -1,11 +1,11 @@
 
 # A Compiler for the Hana Programming Language
 
-Hana is a little (bit bigger than hana) programming language, similar in size to C, but with automatic memory management.
+Hana is a little (bit bigger than Carlos as a) programming language, similar in size to C, but with automatic memory management.
 
 The language is described in detail [here](http://cs.lmu.edu/~ray/notes/hana/).
 
-## Differences between hana and Hana
+## Some Differences between Carlos and Hana
 
 Hana has enumerations. 
   * An identifier declared as a literal of an enumeration type has the scope of the type itself. 

@@ -56,19 +56,22 @@ SKIP: {
 // Reserved Words and symbols
 
 TOKEN: {
-   "boolean"  |  "if"      |  "break"   |  "else"   |  "int"    |  "for"
-|  "return"   |  "char"    |  "struct"  |  "null"   |  "while"  |  "real"
-|  "true"     |  "string"  |  "void"    |  "false"  |  "new"    |  "length"
-|  "print"
 
-|  "."   |   ","    |   ";"
+   "boolean"  |  "int"     |  "char"    |  "real"   |  "string"
+|  "stream"   |  "thread"  |  "struct"  |  "enum"   |  "void"
+|  "const"    |  "volatile"|  "null"    |  "true"   |  "false"
+|  "if"       |  "else"    |  "for"     |  "while"  |  "unless" |  "until"
+|  "break"    |  "continue"|  "return"  |  "start"  |  "die"    |  "new"
+
+|  "."   |   ","    |   "..." |  ";"    |  "::"  |
 |  "("   |   ")"    |  "["    |  "]"    |  "{"   |  "}"
 |  "="
 |  "=="  |   "!="   |  "<"    |  "<="   |  ">"   |  ">="
-|  "||"  |   "&&"   |  "!"
+|  "?"   |   ":"    |  "||"   |  "&&"   |  "!"
 |  "+"   |   "-"    |  "*"    |  "/"    |  "%"
 |  "|"   |   "^"    |  "&"    |  "~"    |  "<<"  |  ">>"
 |  "++"  |   "--"
+|  "#"   |   "$"
 }
 
 // Literals
@@ -76,7 +79,7 @@ TOKEN: {
 TOKEN: {
     < INTLIT: (["0"-"9"])+ >
 |
-    < FLOATLIT: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? >
+    < REALLIT: (["0"-"9"])+ "." (["0"-"9"])+ (<EXPONENT>)? >
 |
     < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
 |
@@ -153,18 +156,32 @@ Declarable parseDec(): {
 
 Type parseTypeDec(): {
     Token s;
+    Token e;
     String t;
     Token f;
-    List<StructField> fields = new ArrayList<StructField>();
-}{
-    "struct" s = <ID>
-    "{"
+    List<StructField> structFields = new ArrayList<StructField>();
+    List<EnumField> enumFields = new ArrayList<EnumField>();
+}{  
     (
-        t = parseType() f = <ID> ";"
-        {fields.add(new StructField(f.image, t));}
-    )*
-    "}"
-    {return new StructType(s.image, fields);}
+        "struct" s = <ID>
+        "{"
+        (
+            t = parseType() f = <ID> ";"
+            {structFields.add(new StructField(f.image, t));}
+        )*
+        "}"
+        {return new StructType(s.image, structFields);}        
+    |
+        "enum" e = <ID>
+        "{" f = <ID>
+        {enumFields.add(new EnumField(f.image, enumFields.size()));}
+        (
+            "," f = <ID>
+            {enumFields.add(new EnumField(f.image, enumFields.size()));}
+        )*
+        "}"
+        {return new EnumType(e.image, enumFields);}  
+    )
 }
 
 String parseType(): {
@@ -182,6 +199,10 @@ String parseType(): {
     |
         i = "string"
     |
+        i = "stream"    
+    |
+        i = "thread"
+    |
         i = <ID>
     )
     {builder.append(i.image);}
@@ -194,10 +215,17 @@ String parseType(): {
 Variable parseVarDec(): {
     String t;
     Token v;
+    Token c;
+    Token vol;
     Expression e = null;
 }{
-    t = parseType() v = <ID> ("=" e = parseExp())? ";"
-    {return new Variable(v.image, t, e);}
+    (
+        (vol = "volatile")? t = parseType() v = <ID> ("=" e = parseExp())? ";"
+        { vol != null ? return new Variable(v.image, t, e, vol.image) : return new Variable(v.image, t, e); }
+    |
+        c = "const" t = parseType() v = <ID> "=" e = parseExp() ";"
+        { return new Variable(v.image, t, e, c.image); }
+    )
 }
 
 Function parseFunDec(): {
@@ -443,7 +471,7 @@ Literal parseLiteral(): {
 |
     i=<INTLIT> {return new IntegerLiteral(i.image);}
 |
-    i=<FLOATLIT> {return new RealLiteral(i.image);}
+    i=<REALLIT> {return new RealLiteral(i.image);}
 |
     i=<CHARLIT> {return new CharLiteral(i.image);}
 |

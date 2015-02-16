@@ -8,6 +8,8 @@ public class Variable extends Declarable {
     private String typename;
     private Expression initializer;
     private Type type;
+    private boolean constant;
+    private boolean volatile;
 
     /**
      * An arbitrary variable, useful in semantic analysis to take the place of a variable that
@@ -22,6 +24,16 @@ public class Variable extends Declarable {
         this.initializer = initializer;
     }
 
+    public Variable(String name, String typename, Expression initializer, String keyword) {
+        super(name);
+        this.typename;
+        this.initializer = initializer
+        if (keyword.equals("const")) {
+            this.constant = true;
+        } else { // A `volatile` keyword
+            this.volatile = true;
+        }
+    }
     /**
      * Special constructor for variables created during semantic analysis (that is, not known
      * while parsing). Examples include parameters for external or built-in functions, and
