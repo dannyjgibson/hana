@@ -63,7 +63,7 @@ TOKEN: {
 |  "if"       |  "else"    |  "for"     |  "while"  |  "unless" |  "until"
 |  "break"    |  "continue"|  "return"  |  "start"  |  "die"    |  "new"
 
-|  "."   |   ","    |   "..." |  ";"    |  "::"  |
+|  "."   |   ","    |   "..." |  ";"    |  "::"  
 |  "("   |   ")"    |  "["    |  "]"    |  "{"   |  "}"
 |  "="
 |  "=="  |   "!="   |  "<"    |  "<="   |  ">"   |  ">="
@@ -216,12 +216,18 @@ Variable parseVarDec(): {
     String t;
     Token v;
     Token c;
-    Token vol;
+    String vol;
     Expression e = null;
 }{
     (
         (vol = "volatile")? t = parseType() v = <ID> ("=" e = parseExp())? ";"
-        { vol != null ? return new Variable(v.image, t, e, vol.image) : return new Variable(v.image, t, e); }
+        {
+            if (vol.equals(null)) {
+                return new Variable(v.image, t, e);
+            } else {
+                return new Variable(v.image, t, e, vol.image); // maybe not pass in the image of the vol?
+            }
+        }
     |
         c = "const" t = parseType() v = <ID> "=" e = parseExp() ";"
         { return new Variable(v.image, t, e, c.image); }
@@ -276,6 +282,35 @@ Statement parseStmt(): {
     LOOKAHEAD(parseDec()) d = parseDec()
     {return new Declaration(d);}
 |
+    LOOKAHEAD(parseSimpleStatement()) s = parseSimpleStatement() // Is s gonna be a simpleStatement
+    (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
+    {return new Statement(s, e);} // Gonna need a new Statement constructor
+|
+    "if" "(" e = parseExp() ")" b = parseBlock() 
+    {cases.add(new Case(e, b));}
+    (
+        LOOKAHEAD(2) "else" "if" "(" e = parseExp() ")" b = parseBlock()
+        {cases.add(new Case(e, b));}
+    )*
+    (
+        "else" elseBlock = parseBlock()
+    )?
+    {return new IfStatement(cases, elseBlock);}
+|
+    "while" "(" e = parseExp() ")" b = parseBlock()
+    {return new WhileStatement(e, b);}
+|
+    LOOKAHEAD(2) "for" "("
+    (t =  parseType() i = <ID> "=" e1 = parseExp())? ";"
+    (e2 = parseExp())? ";"
+    (s = parseAssignment())?
+    ")"
+    b = parseBlock()
+    {return new ClassicForStatement(t, i == null ? null: i.image, e1, e2, s, b);}
+|
+    "for" i = <ID> "(" e = parseExp() ")" b = parseBlock()
+    {return new AtypicalForStatement(i == null ? null: i.image, e, b);} 
+|
     LOOKAHEAD(parseIncop() | parseVar() (parseIncop() | "="))
     s = parseAssignment() ";"
     {return s;}
@@ -315,6 +350,27 @@ Statement parseStmt(): {
     {return new ClassicForStatement(t, i==null?null:i.image, e1, e2, s, b);}
 }
 
+Statement parseSimpleStatement(): {
+    Expression e;
+    AssignmentStatement a;
+    CallStatement c;
+}{
+    "break"
+    {return new BreakStatement();}
+|
+    "continue"
+    {return new ContinueStatement();}
+|
+    "return" (e = parseExp())?
+    {return new ReturnStatement(e);}
+|
+    "die" e = parseExp()
+    {return DieStatement(e);}
+|
+    e = parseCallExpression()
+    {return CallExpression(e);}    
+}
+
 Statement parseAssignment(): {
     VariableExpression v;
     Expression e = null;
@@ -351,11 +407,22 @@ Statement parseCallStatement(): {
 Expression parseExp(): {
     Expression e1;
     Expression e2;
+    Expression e3;
+}{
+    e1 = parseExp0()
+    ("?" e2 = parseExp0() ":" e3 = parseExp0() {return new TernaryExpression(e1, e2, e3);})*
+    {return e1;}
+}
+
+Expression parseExp0(): {
+    Expression e1;
+    Expression e2;
 }{
     e1 = parseExp1()
     ("||" e2 = parseExp1() {e1 = new InfixExpression(e1, "||", e2);})*
-    {return e1;}
+    {return e1;}    
 }
+
 
 Expression parseExp1(): {
     Expression e1;
@@ -438,13 +505,13 @@ Expression parseExp9(): {
     Expression e;
 }{
     (op = parsePrefixop())? e = parseExp10()
-    {return op == null ? e : new PrefixExpression(op, e);}
+    {return op.equals(null) ? e : new PrefixExpression(op, e);}
 }
 
 Expression parseExp10(): {
     Expression e;
 }{
-    LOOKAHEAD(2) e = parseLiteral()
+    LOOKAHEAD(2) e = parseLiteral() // checked 
     {return e;}
 |
     LOOKAHEAD(parseIncrementExpression()) e = parseIncrementExpression()
@@ -462,6 +529,7 @@ Expression parseExp10(): {
 
 Literal parseLiteral(): {
     Token i;
+    Toke j;
 }{
     "null" {return Literal.NULL;}
 |
@@ -476,11 +544,14 @@ Literal parseLiteral(): {
     i=<CHARLIT> {return new CharLiteral(i.image);}
 |
     i=<STRINGLIT> {return new StringLiteral(i.image);}
+|
+    i=<ID> "::" j=<ID> {return new EnumerationLiteral(i.image, j.image);}
 }
 
 VariableExpression parseVar(): {
     VariableExpression v;
     Expression e =  null;
+    Expression e0 = null;
     Token i;
 }{
     (
@@ -488,14 +559,16 @@ VariableExpression parseVar(): {
     |
         i = <ID>
         {v = new SimpleVariableReference(i.image);}
+    |
+        {v = parseCallExpression();}
     )
     (
-        "[" e = parseExp() "]"
+        "[" e = parseExp() ("..." e1 = parseExp())? "]"
         {v = new SubscriptedVariable(v, e);}
     |
         "." i = <ID>
         {v = new DottedVariable(v, i.image);}
-    )*
+    )* 
     {return v;}
 }
 
@@ -519,16 +592,18 @@ Expression parseNewObject(): {
 }{
     "new"
     (
-        LOOKAHEAD(<ID> "{") i = <ID> "{" args = parseArgs() "}"
-        {return new StructAggregate(i.image, args);}
-    |
+    //    LOOKAHEAD(<ID> "{") i = <ID> "{" args = parseArgs() "}"
+    //    {return new StructAggregate(i.image, args);}
+    //|
         t = parseType()
         (
             "{" args = parseArgs() "}"
             {return new ArrayAggregate(t, args);}
-        |
-            "[" e = parseExp() "]"
-            {return new EmptyArray(t, e);}
+        | 
+            // ("[" e = parseExp() "]" {e = new EmptyArray(t, e)})+
+            // gonna have to parse arrays somehow
+            ("[" e = parseExp() "]" )+        
+            {return e;}
         )
     )
 }
@@ -583,7 +658,7 @@ String parseMulop(): {
 String parsePrefixop(): {
     Token i;
 }{
-    (i = "-" | i = "!" | i = "~" | i = "int" | i = "char" | i = "string" | i = "length")
+    (i = "-" | i = "!" | i = "~" | i = "#" | i = "$")
     {return i.image;}
 }
 
