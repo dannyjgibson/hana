@@ -61,7 +61,7 @@ TOKEN: {
 |  "stream"   |  "thread"  |  "struct"  |  "enum"   |  "void"
 |  "const"    |  "volatile"|  "null"    |  "true"   |  "false"
 |  "if"       |  "else"    |  "for"     |  "while"  |  "unless" |  "until"
-|  "break"    |  "continue"|  "return"  |  "start"  |  "die"    |  "new"
+|  "break"    |  "continue"|  "return"  |  "start"  |  "die"    |  "new"  | "print"
 
 |  "."   |   ","    |   "..." |  ";"    |  "::"  
 |  "("   |   ")"    |  "["    |  "]"    |  "{"   |  "}"
