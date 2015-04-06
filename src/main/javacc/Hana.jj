@@ -286,20 +286,6 @@ Statement parseStmt(): {
     (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
     {return new Statement(s, e);} // Gonna need a new Statement constructor
 |
-    "if" "(" e = parseExp() ")" b = parseBlock() 
-    {cases.add(new Case(e, b));}
-    (
-        LOOKAHEAD(2) "else" "if" "(" e = parseExp() ")" b = parseBlock()
-        {cases.add(new Case(e, b));}
-    )*
-    (
-        "else" elseBlock = parseBlock()
-    )?
-    {return new IfStatement(cases, elseBlock);}
-|
-    "while" "(" e = parseExp() ")" b = parseBlock()
-    {return new WhileStatement(e, b);}
-|
     LOOKAHEAD(2) "for" "("
     (t =  parseType() i = <ID> "=" e1 = parseExp())? ";"
     (e2 = parseExp())? ";"
@@ -307,9 +293,6 @@ Statement parseStmt(): {
     ")"
     b = parseBlock()
     {return new ClassicForStatement(t, i == null ? null: i.image, e1, e2, s, b);}
-|
-    "for" i = <ID> "(" e = parseExp() ")" b = parseBlock()
-    {return new AtypicalForStatement(i == null ? null: i.image, e, b);} 
 |
     LOOKAHEAD(parseIncop() | parseVar() (parseIncop() | "="))
     s = parseAssignment() ";"
@@ -355,16 +338,16 @@ Statement parseSimpleStatement(): {
     AssignmentStatement a;
     CallStatement c;
 }{
-    "break"
+    "break" ";"
     {return new BreakStatement();}
 |
-    "continue"
+    "continue" ";"
     {return new ContinueStatement();}
 |
-    "return" (e = parseExp())?
+    "return" (e = parseExp())? ";"
     {return new ReturnStatement(e);}
 |
-    "die" e = parseExp()
+    "die" e = parseExp() ";"
     {return DieStatement(e);}
 |
     e = parseCallExpression()
@@ -529,7 +512,7 @@ Expression parseExp10(): {
 
 Literal parseLiteral(): {
     Token i;
-    Toke j;
+    Token j;
 }{
     "null" {return Literal.NULL;}
 |
@@ -559,8 +542,6 @@ VariableExpression parseVar(): {
     |
         i = <ID>
         {v = new SimpleVariableReference(i.image);}
-    |
-        {v = parseCallExpression();}
     )
     (
         "[" e = parseExp() ("..." e1 = parseExp())? "]"
