@@ -32,7 +32,7 @@ public class TernaryExpression extends Expression {
   public void analyze(AnalysisContext context) {
     // how to tell if condition is true?
     // check for all the truthy values in Hana?
-    if (condition instanceof BooleanLiteral) {
+    if (condition instanceof BooleanLiteral) { // and true, right?
       this.trueOption.analyze(context);
     } else {
       this.falseOption.analyze(context);

@@ -339,8 +339,7 @@ Statement parseStmt(): {
 
 Statement parseSimpleStatement(): {
     Expression e;
-    AssignmentStatement a;
-    CallStatement c;
+    Statement a;
 }{
     "break" ";"
     {return new BreakStatement();}
@@ -358,8 +357,9 @@ Statement parseSimpleStatement(): {
     a = parseAssignment()
     {return a;}
 |
-    e = parseCallExpression()
-    {return e;}    
+    LOOKAHEAD(parseCallStatement())
+    a = parseCallStatement()
+    {return a;}    
 }
 
 Statement parseAssignment(): {
