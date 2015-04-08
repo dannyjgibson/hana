@@ -220,7 +220,7 @@ Variable parseVarDec(): {
     String t;
     Token v;
     Token c;
-    String vol;
+    Token vol = null;
     Expression e = null;
 }{
     (
@@ -229,7 +229,7 @@ Variable parseVarDec(): {
             if (vol.equals(null)) {
                 return new Variable(v.image, t, e);
             } else {
-                return new Variable(v.image, t, e, vol); // maybe not pass in the image of the vol?
+                return new Variable(v.image, t, e, vol.image); // maybe not pass in the image of the vol?
             }
         }
     |
@@ -338,7 +338,7 @@ Statement parseStmt(): {
 }
 
 Statement parseSimpleStatement(): {
-    Expression e;
+    Expression e = null;
     Statement a;
 }{
     "break" ";"
