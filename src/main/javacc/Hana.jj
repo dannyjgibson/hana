@@ -18,6 +18,10 @@ options {
 // ---------------------------------------------------------------------------
 
 PARSER_BEGIN(Parser)
+/*
+* When you run `javacc` on this file, make you run from a pwd with children directory 
+* like that in the package statement below.
+*/
 
 package edu.lmu.cs.xlg.hana.syntax;
 
@@ -225,7 +229,7 @@ Variable parseVarDec(): {
             if (vol.equals(null)) {
                 return new Variable(v.image, t, e);
             } else {
-                return new Variable(v.image, t, e, vol.image); // maybe not pass in the image of the vol?
+                return new Variable(v.image, t, e, vol); // maybe not pass in the image of the vol?
             }
         }
     |
@@ -284,7 +288,7 @@ Statement parseStmt(): {
 |
     LOOKAHEAD(parseSimpleStatement()) s = parseSimpleStatement() // Is s gonna be a simpleStatement
     (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
-    {return new Statement(s, e);} // Gonna need a new Statement constructor
+    {return new ConditionalStatement(s, e);}
 |
     LOOKAHEAD(2) "for" "("
     (t =  parseType() i = <ID> "=" e1 = parseExp())? ";"
@@ -348,10 +352,14 @@ Statement parseSimpleStatement(): {
     {return new ReturnStatement(e);}
 |
     "die" e = parseExp() ";"
-    {return DieStatement(e);}
+    {return new DieStatement(e);}
+|
+    LOOKAHEAD(parseAssignment())
+    a = parseAssignment()
+    {return a;}
 |
     e = parseCallExpression()
-    {return CallExpression(e);}    
+    {return e;}    
 }
 
 Statement parseAssignment(): {
@@ -544,7 +552,7 @@ VariableExpression parseVar(): {
         {v = new SimpleVariableReference(i.image);}
     )
     (
-        "[" e = parseExp() ("..." e1 = parseExp())? "]"
+        "[" e = parseExp() ("..." e0 = parseExp())? "]"
         {v = new SubscriptedVariable(v, e);}
     |
         "." i = <ID>

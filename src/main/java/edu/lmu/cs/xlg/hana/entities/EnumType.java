@@ -24,7 +24,7 @@ public class EnumType extends Type {
     public void analyze(AnalysisContext context) {
         Set<String> enumNames = new HashSet<String>();
         for (EnumField field: fields) {
-            if (! fieldNames.add(field.getName())) {
+            if (! enumNames.add(field.getName())) {
                 context.error("duplicate_field", field.getName(), this.getName());
             }
         }

@@ -9,7 +9,7 @@ public class Variable extends Declarable {
     private Expression initializer;
     private Type type;
     private boolean constant;
-    private boolean volatile;
+    private boolean mayMutate;
 
     /**
      * An arbitrary variable, useful in semantic analysis to take the place of a variable that
@@ -26,12 +26,12 @@ public class Variable extends Declarable {
 
     public Variable(String name, String typename, Expression initializer, String keyword) {
         super(name);
-        this.typename;
-        this.initializer = initializer
+        this.typename = typename;
+        this.initializer = initializer;
         if (keyword.equals("const")) {
             this.constant = true;
         } else { // A `volatile` keyword
-            this.volatile = true;
+            this.mayMutate = true;
         }
     }
     /**
