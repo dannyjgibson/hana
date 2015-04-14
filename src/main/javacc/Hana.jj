@@ -21,6 +21,7 @@ PARSER_BEGIN(Parser)
 /*
 * When you run `javacc` on this file, make you run from a pwd with children directory 
 * like that in the package statement below.
+* And pipe the output files to a file matching the package below.
 */
 
 package edu.lmu.cs.xlg.hana.syntax;
