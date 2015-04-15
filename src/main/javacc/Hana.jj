@@ -227,7 +227,7 @@ Variable parseVarDec(): {
     (
         (vol = "volatile")? t = parseType() v = <ID> ("=" e = parseExp())? ";"
         {
-            if (vol.equals(null)) {
+            if (vol == null) {
                 return new Variable(v.image, t, e);
             } else {
                 return new Variable(v.image, t, e, vol.image); // maybe not pass in the image of the vol?
@@ -494,19 +494,19 @@ Expression parseExp8(): {
 
 Expression parseExp9(): {
     String op = null;
-    Expression e;
+    Expression e = null;
 }{
     (op = parsePrefixop())? e = parseExp10()
-    {return op.equals(null) ? e : new PrefixExpression(op, e);}
+    {return op == null ? e : new PrefixExpression(op, e);}
 }
 
 Expression parseExp10(): {
-    Expression e;
+    Expression e = null;
 }{
-    LOOKAHEAD(2) e = parseLiteral() // checked 
+    LOOKAHEAD(2) e = parseLiteral()
     {return e;}
 |
-    LOOKAHEAD(parseIncrementExpression()) e = parseIncrementExpression()
+    LOOKAHEAD(e = parseIncrementExpression()) e = parseIncrementExpression()
     {return e;}
 |
     e = parseVar()
@@ -573,6 +573,7 @@ Expression parseIncrementExpression(): {
     {return new PostfixExpression(v, op);}
 }
 
+// 
 Expression parseNewObject(): {
     String t;
     List<Expression> args;
