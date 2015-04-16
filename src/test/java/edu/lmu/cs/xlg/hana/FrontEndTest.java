@@ -60,33 +60,27 @@ public class FrontEndTest {
             Reader reader = new FileReader(TEST_DIRECTORY + "/" + filename);
 
             Compiler compiler = new Compiler();
-            compiler.setQuiet(true);
+            compiler.setQuiet(false);
 
             if (filename.startsWith("synerror")) {
                 // Expect at least one error during syntax checking
                 compiler.checkSyntax(reader);
-                assertTrue("Supposed to have syntax errors", compiler.getErrorCount() != 0);
-                assertTrue(filename + " is bad, no syntax errors", compiler.getErrorCount() == 0);
-            
+                assertTrue("Supposed to have syntax errors", compiler.getErrorCount() != 0);            
             } else if (filename.startsWith("semerror")) {
                 // Expect no syntax errors, but one or more semantic errors
                 Program program = compiler.checkSyntax(reader);
                 assertTrue("Supposed to have NO syntax errors", compiler.getErrorCount() == 0);
-                assertTrue(filename + " is bad, syntax errors exist", compiler.getErrorCount() != 0);
                 
                 compiler.checkSemantics(program);
                 assertTrue("Supposed to have semantic errors", compiler.getErrorCount() != 0);
-                assertTrue(filename + " is bad, no semantic errors", compiler.getErrorCount() == 0);
             } else {
                 // Expect no errors even after all semantic checks
                 compiler.checkSemantics(reader);
                 assertTrue("Supposed to be error free", compiler.getErrorCount() == 0);
-                assertTrue(filename + " is bad, errors exist", compiler.getErrorCount() != 0);
             }
             System.out.print("PASS");
         } catch (AssertionError e) {
-            System.out.print("FAIL: ");
-            e.printStackTrace();
+            System.out.print("FAIL: " + e.getMessage());
             throw e;
         } finally {
             System.out.println();
