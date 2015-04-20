@@ -1,5 +1,5 @@
 int var1 = 10;
 int var2 = 5;
   
-// Semantic error: length operator works only on arrays and strings
-int var3 = length(var1 + var2);
+// Semantic error: length operator(#) works only on arrays and strings
+int var3 = #(var1 + var2);

@@ -48,7 +48,7 @@ public class PrefixExpression extends Expression {
         } else if ("string".equals(op)) {
             type = Type.STRING;
 
-        } else if ("length".equals(op)) {
+        } else if ("#".equals(op)) {
             operand.assertArrayOrString(op, context);
             type = Type.INT;
 
