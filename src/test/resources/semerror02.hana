@@ -1,7 +1,7 @@
 // (c) Prabhu Anbanathan
 
 void main() {
-   print  sum(5,7);
+   print(sum(5,7));
 }
 
 // Semantic error: parameter identifiers should be unique
