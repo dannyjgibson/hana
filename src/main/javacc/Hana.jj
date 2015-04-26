@@ -324,11 +324,15 @@ Statement parseStmt(): {
     }
 |
     s = parseSimpleStatement() 
-    {System.out.println("simple statement parsed");}
     (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
     {
-        //System.out.println("parseStmt::ConditionalStatement");
-        return new ConditionalStatement(s, e);
+        if (e == null) {
+            //System.out.println("parseStmt::SimpleStatement");
+            return s;
+        } else {
+            //System.out.println("parseStmt::ConditionalSimpleStatement");
+            return new ConditionalSimpleStatement(s, e);
+        }
     }
 |
     LOOKAHEAD(2) "for" "("
@@ -460,7 +464,7 @@ Statement parseCallStatement(): {
     |
         "print" "(" args = parseArgs() ")"
         {
-            System.out.println("parsePrintStatement");
+            //System.out.println("parsePrintStatement");
             return new PrintStatement(args);
         }    
     )

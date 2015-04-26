@@ -1,15 +1,15 @@
 package edu.lmu.cs.xlg.hana.entities;
 
 /** 
-* A conditional statement.
+* A conditional simple statement.
 */
 
-public class ConditionalStatement extends Statement {
+public class ConditionalSimpleStatement extends Statement {
 
   private Statement simpleStatement;
   private Expression conditionalExpression;
 
-  public ConditionalStatement(Statement simpleStatement, Expression conditionalExpression) {
+  public ConditionalSimpleStatement(Statement simpleStatement, Expression conditionalExpression) {
     this.simpleStatement = simpleStatement;
     this.conditionalExpression = conditionalExpression;
   }
