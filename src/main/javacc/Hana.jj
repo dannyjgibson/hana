@@ -324,14 +324,14 @@ Statement parseStmt(): {
     }
 |
     s = parseSimpleStatement() 
-    (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
+    ( t = ( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
     {
         if (e == null) {
             //System.out.println("parseStmt::SimpleStatement");
             return s;
         } else {
             //System.out.println("parseStmt::ConditionalSimpleStatement");
-            return new ConditionalSimpleStatement(s, e);
+            return new ConditionalSimpleStatement(s, e, t);
         }
     }
 |
