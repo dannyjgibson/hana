@@ -316,7 +316,7 @@ Statement parseStmt(): {
     List<Expression> args = new ArrayList<Expression>();
     List<Case> cases = new ArrayList<Case>();
 }{
-    LOOKAHEAD(parseDec()) 
+    LOOKAHEAD(3)
     d = parseDec()
     {
         //System.out.println("parseStmt::Declaration");
@@ -324,14 +324,25 @@ Statement parseStmt(): {
     }
 |
     s = parseSimpleStatement() 
-    ( t = ( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
+    (
+        (
+            i = "if"
+        | 
+            i = "unless"
+        |  
+            i = "while"
+        | 
+            i = "until"
+        )
+        e  = parseExp()
+    )? ";"
     {
         if (e == null) {
             //System.out.println("parseStmt::SimpleStatement");
             return s;
         } else {
             //System.out.println("parseStmt::ConditionalSimpleStatement");
-            return new ConditionalSimpleStatement(s, e, t);
+            return new ConditionalSimpleStatement(s, e, i.image);
         }
     }
 |

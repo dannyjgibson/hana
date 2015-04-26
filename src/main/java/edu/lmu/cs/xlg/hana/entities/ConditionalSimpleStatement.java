@@ -33,16 +33,20 @@ public class ConditionalSimpleStatement extends Statement {
     if (control.equals("if")) {
       condition.analyze(context);
       condition.assertBoolean("if_condition_not_boolean", context);
-      simpleStatement.analyze();
+      simpleStatement.analyze(context);
     } else if (control.equals("while")) {
-
-    } else if (control.equals("unless")) {
-
-    } else { // control equals until
-
-    }
-
-    
+      condition.analyze(context);
+      condition.assertBoolean("while_condition_not_boolean", context);
+      simpleStatement.analyze(context.withInLoop(true));
+    } else if (control.equals("unless")) { // unless is the opposite of if
+      condition.analyze(context);
+      condition.assertBoolean("unless_condition_not_boolean", context);
+      simpleStatement.analyze(context);
+    } else { // control equals until, which is the opposite of while
+      condition.analyze(context);
+      condition.assertBoolean("until_condition_not_boolean", context);
+      simpleStatement.analyze(context.withInLoop(true));
+    }    
   }
 
   @Override
@@ -53,7 +57,7 @@ public class ConditionalSimpleStatement extends Statement {
     }
     if ((control.equals("unless") || control.equals("until")) && condition.isTrue()) {
       // "unless true" or "until true" are both no-ops
-      return null
+      return null;
     }
     return this;
   }
