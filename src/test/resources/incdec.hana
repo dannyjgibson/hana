@@ -13,7 +13,7 @@ a[4]++;
 // Expressions
 
 int y = x++;
-print x++;
+print (x++);
 y = x--;
 
 y = a[x]++;
