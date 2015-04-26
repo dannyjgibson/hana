@@ -19,4 +19,4 @@ person p = new person{"Sue", 70.0, new date{8, 18, 1990}};
 
 group[] groups = new group[100];
 
-print groups[40].members[5].birthday.year;
+print(groups[40].members[5].birthday.year);

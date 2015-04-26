@@ -6,5 +6,5 @@ struct List {
 List list;
 
 for (List p = list; p != null; p = p.next) {
-    print p.data;
+    print (p.data);
 }
