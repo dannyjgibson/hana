@@ -324,6 +324,7 @@ Statement parseStmt(): {
     }
 |
     s = parseSimpleStatement() 
+    {System.out.println("simple statement parsed");}
     (( "if" | "unless" | "while" | "until") e  = parseExp())? ";"
     {
         //System.out.println("parseStmt::ConditionalStatement");
@@ -387,7 +388,7 @@ Statement parseSimpleStatement(): {
 |
     "return" (e = parseExp())?
     {
-        System.out.println("parseSimpleStatement::ReturnStatement");
+        //System.out.println("parseSimpleStatement::ReturnStatement");
         return new ReturnStatement(e);
     }
 |
@@ -450,11 +451,20 @@ Statement parseCallStatement(): {
     Token i;
     List<Expression> args;
 }{
-    i = <ID> "(" args = parseArgs() ")"
-    {
-        //System.out.println("parseCallStatement");
-        return new CallStatement(i.image, args);
-    }
+    (
+        i = <ID> "(" args = parseArgs() ")"
+        {
+            //System.out.println("parseCallStatement");
+            return new CallStatement(i.image, args);
+        }
+    |
+        "print" "(" args = parseArgs() ")"
+        {
+            System.out.println("parsePrintStatement");
+            return new PrintStatement(args);
+        }    
+    )
+
 }
 
 Expression parseExp(): {

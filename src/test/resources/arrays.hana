@@ -1,4 +1,5 @@
 int[] x = new int[]{10, 20, 30};
+int q = #x; // length of x
 int[] y;
 int z;
 

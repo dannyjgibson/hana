@@ -1,6 +1,6 @@
 // A good "first example" for studying semantics
 
-int x = length(f(2));
+int x = #(f(2));
 
 string f(int y) {
     dog z;

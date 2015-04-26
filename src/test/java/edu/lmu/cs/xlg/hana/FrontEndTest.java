@@ -79,8 +79,10 @@ public class FrontEndTest {
                 assertTrue("Supposed to be error free", compiler.getErrorCount() == 0);
             }
             System.out.print("PASS");
+            System.out.println();
         } catch (AssertionError e) {
             System.out.print("FAIL: " + e.getMessage());
+            System.out.println();
             throw e;
         } finally {
             System.out.println();
